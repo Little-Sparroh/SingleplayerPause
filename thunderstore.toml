@@ -1,0 +1,38 @@
+[config]
+schemaVersion = "0.0.1"
+
+[package]
+namespace = "Sparroh"
+name = "SingleplayerPause"
+description = "Pauses the gamestate when opening the menu while in mission. This should only work while solo. Current Bug: cannot abort mission as it is tied to the gamestate, must exit to main menu."
+websiteUrl = "https://github.com/Little-Sparroh/SingleplayerPause"
+containsNsfwContent = false
+
+[package.dependencies]
+BepInEx-BepInExPack_Mycopunk = "5.4.2403"
+
+[build]
+icon = "icon.png"
+readme = "README.md"
+outdir = "build"
+
+[[build.copy]]
+source = "bin/Release/net48/SingleplayerPause.dll"
+target = "BepInEx/plugins/SingleplayerPause.dll"
+
+[[build.copy]]
+source = "CHANGELOG.md"
+target = "CHANGELOG.md"
+
+[[build.copy]]
+source = "LICENSE"
+target = "LICENSE"
+
+[publish]
+repository = "https://thunderstore.io"
+communities = [ "mycopunk" ]
+
+[publish.categories]
+mycopunk = [ "client" ]
+
+
