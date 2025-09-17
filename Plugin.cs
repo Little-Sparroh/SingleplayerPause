@@ -5,8 +5,7 @@ using Unity.Netcode;  // For NetworkManager
 using System.Collections;  // For Coroutine
 using UnityEngine.InputSystem;  // For Keyboard.current
 
-[BepInPlugin("com.yourname.pausemenu.mod", "SingleplayerPauseMod", "1.0.0")]
-[MycoMod(null, ModFlags.IsClientSide)]
+[BepInPlugin("com.yourname.pausemenu.mod", "SingleplayerPauseMod", "1.1.0")]
 public class SingleplayerPauseMod : BaseUnityPlugin
 {
     public static ManualLogSource LoggerInstance;  // Public static for access
@@ -41,6 +40,20 @@ public class SingleplayerPauseMod : BaseUnityPlugin
                 AudioListener.pause = false;
                 StartCoroutine(ResumeAfterInput(0.5f));  // Increased delay to 0.5s for close animation
             }
+        }
+
+        // New: Detect if paused but no longer singleplayer (e.g., player joined mid-pause) and unpause
+        if (wasPaused && !isSingleplayer)
+        {
+            Time.timeScale = 1f;  // Resume normal speed
+            AudioListener.pause = false;  // Resume audio
+            wasPaused = false;
+            if (pauseCoroutine != null)
+            {
+                StopCoroutine(pauseCoroutine);
+                pauseCoroutine = null;
+            }
+            //LoggerInstance.LogInfo("Unpaused due to multiplayer transition (player joined mid-pause)");
         }
 
         // Only pause for in-game menus (not hubs/lobbies/startup)
